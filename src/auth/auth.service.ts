@@ -4,10 +4,16 @@ import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { AuthDto } from './dto'
 import * as argon from 'argon2'
+import { JwtService } from '@nestjs/jwt'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+    constructor(
+        @InjectModel(User.name) private userModel: Model<UserDocument>,
+        private jwt: JwtService,
+        private config: ConfigService
+    ) {}
 
     async signup(dto: AuthDto) {
         //check if such user exists
@@ -35,7 +41,19 @@ export class AuthService {
         if (!passMatches) {
             throw new ForbiddenException('Credentials incorrect')
         }
-        return findUser
+        return this.signToken(findUser._id, findUser.email)
+    }
+
+    async signToken(userId: UserDocument['_id'], email: string): Promise<{ access_token: string }> {
+        const payload = {
+            sub: userId,
+            email,
+        }
+        const secret = this.config.get('JWT_SECRET')
+        const token = await this.jwt.signAsync(payload, { expiresIn: '1h', secret })
+        return {
+            access_token: token,
+        }
     }
 
     // async signup(email: string, password: string): Promise<User> {
