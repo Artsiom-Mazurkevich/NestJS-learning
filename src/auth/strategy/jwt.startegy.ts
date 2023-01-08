@@ -19,6 +19,10 @@ export class JwtStartegy extends PassportStrategy(Strategy, 'jwt') {
         const user: Document<User> | null = await this.userModel.findOne({ _id: payload.sub })
         // @ts-ignore
         delete user._doc.password
+        // @ts-ignore
+        delete user._doc.createdAt
+        // @ts-ignore
+        delete user._doc.updatedAt
         return user
     }
 }
