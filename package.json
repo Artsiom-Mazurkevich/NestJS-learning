@@ -28,7 +28,6 @@
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@nestjs/serve-static": "^3.0.0",
     "argon2": "^0.30.2",
     "buffer-to-stream": "^1.0.0",
     "class-transformer": "^0.5.1",
