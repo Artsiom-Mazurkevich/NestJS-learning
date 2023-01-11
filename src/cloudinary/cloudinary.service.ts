@@ -4,7 +4,7 @@ import toStream = require('buffer-to-stream')
 
 @Injectable()
 export class CloudinaryService {
-    async uploadImage(file: Express.Multer.File) {
+    async uploadImage(file: Express.Multer.File): Promise<string> {
         return new Promise((resolve, reject) => {
             const upload = v2.uploader.upload_stream({ folder: 'blog_platform' }, (error, result) => {
                 if (error) return reject(error)
@@ -12,8 +12,6 @@ export class CloudinaryService {
             })
 
             toStream(file.buffer).pipe(upload)
-        }).then((res: any) => ({
-            url: res.secure_url,
-        }))
+        }).then((res: any) => res.secure_url)
     }
 }

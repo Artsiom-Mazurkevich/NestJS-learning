@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { HydratedDocument } from 'mongoose'
 import { User } from './user.schema'
+import * as paginate from 'mongoose-paginate'
 
 export type ArticleDocument = HydratedDocument<Article>
 
@@ -21,8 +22,9 @@ export class Article {
     @Prop({ default: 0 })
     viewsCount: number
 
-    @Prop()
-    imageUrl: string
+    @Prop({ type: String, default: null })
+    imageUrl: string | null
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article)
+ArticleSchema.plugin(paginate)
