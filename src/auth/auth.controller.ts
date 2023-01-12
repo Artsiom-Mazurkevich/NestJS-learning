@@ -1,7 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseFilters } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseFilters, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { HttpErrorFilter } from '../exeption-filters/http-exception.filter'
 import { SignInDto, SignUpDto } from './dto'
+import { GetUser, RequestUser } from './decorator'
+import { JwtGuard } from './guard'
 
 @Controller('auth')
 export class AuthController {
@@ -18,5 +20,11 @@ export class AuthController {
     @UseFilters(new HttpErrorFilter())
     login(@Body() dto: SignInDto) {
         return this.authService.signin(dto)
+    }
+
+    @Get('me')
+    @UseGuards(JwtGuard)
+    getMe(@GetUser() user: RequestUser) {
+        return user
     }
 }

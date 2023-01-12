@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { AuthModule } from './auth/auth.module'
-import { UserModule } from './user/user.module'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { ArticleModule } from './article/article.module'
 import * as process from 'process'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { APP_GUARD } from '@nestjs/core'
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
     imports: [
@@ -27,13 +27,11 @@ import { APP_GUARD } from '@nestjs/core'
             }),
         }),
         AuthModule,
-        UserModule,
         ConfigModule.forRoot({ isGlobal: true }),
         CloudinaryModule,
         ArticleModule,
+        ProfileModule,
     ],
     providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
-
-console.log(process.env.THROTTLE_TTL)

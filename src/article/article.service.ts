@@ -55,6 +55,6 @@ export class ArticleService {
                 if (err) throw new InternalServerErrorException()
             }
         )
-        return articles
+        return articles.docs
     }
 }
