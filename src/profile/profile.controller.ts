@@ -11,8 +11,6 @@ export class ProfileController {
     @UseGuards(JwtGuard)
     @UseInterceptors(FileInterceptor('image'))
     updateUserPhoto(@GetUser() user: RequestUser, @UploadedFile() file: Express.Multer.File) {
-        if (user._id.toString() === id) {
-            return this.profileService.updateUserPhoto(id, file)
-        }
+        return this.profileService.updateUserPhoto(user._id, file)
     }
 }

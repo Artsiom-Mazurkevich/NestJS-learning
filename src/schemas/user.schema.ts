@@ -14,7 +14,7 @@ export class User {
     @Prop({ unique: true, required: true })
     username: string
 
-    @Prop()
+    @Prop({ default: null })
     avatar?: string
 }
 

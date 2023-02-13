@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseFilters, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseFilters, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { HttpErrorFilter } from '../exeption-filters/http-exception.filter'
 import { SignInDto, SignUpDto } from './dto'
 import { GetUser, RequestUser } from './decorator'
 import { JwtGuard } from './guard'
+import { Response } from 'express'
 
 @Controller('auth')
 export class AuthController {
@@ -18,8 +19,8 @@ export class AuthController {
 
     @Post('signin')
     @UseFilters(new HttpErrorFilter())
-    login(@Body() dto: SignInDto) {
-        return this.authService.signin(dto)
+    login(@Body() dto: SignInDto, @Res({ passthrough: true }) response: Response) {
+        return this.authService.signin(dto, response)
     }
 
     @Get('me')

@@ -6,6 +6,7 @@ import { SignInDto, SignUpDto } from './dto'
 import * as argon from 'argon2'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
+import { Response } from 'express'
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
         }))
     }
 
-    async signin(dto: SignInDto) {
+    async signin(dto: SignInDto, response: Response) {
         const findUser = await this.userModel.findOne({ email: dto.email })
         if (!findUser) {
             throw new ForbiddenException('Credentials incorrect')
@@ -42,7 +43,8 @@ export class AuthService {
         if (!passMatches) {
             throw new ForbiddenException('Credentials incorrect')
         }
-        return this.signToken(findUser._id, findUser.email)
+        const access_token = await this.signToken(findUser._id, findUser.email)
+        response.cookie('auth', access_token, { httpOnly: true, path: '/' })
     }
 
     async signToken(userId: UserDocument['_id'], email: string): Promise<{ access_token: string }> {
