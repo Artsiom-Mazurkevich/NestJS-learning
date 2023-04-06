@@ -44,13 +44,14 @@ export class ArticleService {
             // result.page - 3
             // result.pages
         })
+        console.log(articlesCount)
         return articlesCount
     }
 
     async getDefaultCountArticles() {
         const articles = await this.articleModel.paginate(
             {},
-            { page: 1, limit: 5, sort: { createdAt: -1 } },
+            { page: 1, limit: 5, sort: { createdAt: -1 }, populate: { path: 'authorId', select: 'avatar' } },
             (err, result) => {
                 if (err) throw new InternalServerErrorException()
             }

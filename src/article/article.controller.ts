@@ -28,6 +28,7 @@ export class ArticleController {
 
     @Get(':id')
     getOneArticle(@Param('id') id: string) {
+        console.log(id)
         return this.articleService.getOneArticle(id)
     }
 
